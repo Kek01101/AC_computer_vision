@@ -12,21 +12,21 @@ Variable setup-
 # Depreciated - Variables have to manually be set in the canny function otherwise the code breaks.
 
 #2 - Points 1-4 co-ordinates for mask
-x1 = 533
+x1 = 570
 y1 = 437
 x2 = 196
 y2 = 687
 x3 = 1076
 y3 = 648
-x4 = 799
-y4 = 452
+x4 = 760
+y4 = 430
 
 #3 - Hough transformation variables
-rho = 4
+rho = 3
 theta = 8 * np.pi/180
-threshold = 30
-minLength = 25
-maxGap = 4
+threshold = 20
+minLength = 20
+maxGap = 5
 
 # Importing the test video
 cap = cv2.VideoCapture("test_videos/challenge.mp4")
@@ -35,7 +35,7 @@ if not cap.isOpened():
 
 # Defining codecs and videoWriter for creating output video
 fourcc = cv2.VideoWriter_fourcc(*"DIVX")
-output = cv2.VideoWriter("test_videos_output/challenge_test_2.avi", fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
+output = cv2.VideoWriter("test_videos_output/challenge_final.avi", fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
 
 while True:
     ret, frame = cap.read()
@@ -46,6 +46,9 @@ while True:
     # Splitting the image into three channels and then removing green - helps detect yellow better
     b, g, r = cv2.split(frame)
     img = cv2.merge((b, np.zeros_like(b), r))
+
+    # Blurring the image in hopes it improves detection of lane line
+    img = cv2.GaussianBlur(img, (11, 11), cv2.BORDER_DEFAULT)
 
     # Canny edge detection run on image
     canny = cv2.Canny(img, 41, 106)
@@ -60,11 +63,11 @@ while True:
     masked_edges = cv2.bitwise_and(canny, mask)
     linesP = cv2.HoughLinesP(masked_edges, rho, theta, threshold, np.array([]), minLength, maxGap)
 
-    # Drawing hough lines onto original frame
+    # Drawing hough lines onto original frame for output
     if linesP is not None:
         for i in range(0, len(linesP)):
             l = linesP[i][0]
-            cv2.line(frame, (l[0], l[1]), (l[2], l[3]), (0, 0, 255), 2, cv2.LINE_AA)
+            cv2.line(frame, (l[0], l[1]), (l[2], l[3]), (0, 255, 100), 2, cv2.LINE_AA)
 
     # Writing the modified frame to the output video
     output.write(frame)
