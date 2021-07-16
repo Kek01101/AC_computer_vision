@@ -12,30 +12,30 @@ Variable setup-
 # Depreciated - Variables have to manually be set in the canny function otherwise the code breaks.
 
 #2 - Points 1-4 co-ordinates for mask
-x1 = 441
-y1 = 392
-x2 = 94
-y2 = 540
-x3 = 761
-y3 = 540
-x4 = 553
-y4 = 390
+x1 = 277 * 2.02
+y1 = 351 * 2.12
+x2 = 0
+y2 = 535 * 2.12
+x3 = 680 * 2.02
+y3 = 535 * 2.12
+x4 = 454 * 2.02
+y4 = 306 * 2.12
 
 #3 - Hough transformation variables
-rho = 1
-theta = 4 * np.pi/180
+rho = 2
+theta = 2 * np.pi/180
 threshold = 15
-minLength = 55
-maxGap = 7
+minLength = 15
+maxGap = 15
 
 # Importing the test video
-cap = cv2.VideoCapture("test_videos/challenge.mp4")
+cap = cv2.VideoCapture("test_videos/Example002.mp4")
 if not cap.isOpened():
     raise BrokenPipeError("Video not initializing")
 
 # Defining codecs and videoWriter for creating output video
 fourcc = cv2.VideoWriter_fourcc(*"DIVX")
-output = cv2.VideoWriter("test_videos_output/challenge_test.avi", fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
+output = cv2.VideoWriter("test_videos_output/2_final.avi", fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
 
 while True:
     ret, frame = cap.read()
@@ -47,7 +47,7 @@ while True:
     img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # Canny edge detection run on image
-    canny = cv2.Canny(img, 111, 189)
+    canny = cv2.Canny(img, 173, 106)
 
     # Creating polygon mask
     mask = np.zeros_like(canny)

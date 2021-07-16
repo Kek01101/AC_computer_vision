@@ -5,15 +5,14 @@ import matplotlib.pyplot as plt
 def callback(x):
     print(x)
 
-src = "test_images/challenge_2.png"
-img = cv2.imread(src, cv2.IMREAD_COLOR) #read image as grayscale
+src = "test_images/2.png"
+img = cv2.imread(src, 0) #read image as grayscale
 
-b,g,r = cv2.split(img)
-img = cv2.merge((b, np.zeros_like(b), r))
 canny = cv2.Canny(img, 85, 255) # Run canny edge detection on image
 
 mask = np.zeros_like(canny) # Creating a polygon mask
 imshape = img.shape
+print(imshape)
 vertices = np.array([[(0,0), (0,imshape[0]), (imshape[1],imshape[0]), (imshape[1],0)]], dtype=np.int32)
 cv2.fillPoly(mask, vertices, 255)
 masked_edges = cv2.bitwise_and(canny, mask)
@@ -54,7 +53,7 @@ while(1):
     cv2.imshow('output', lines_out)
     k = cv2.waitKey(1) & 0xFF
     if k == 27: #escape key
-        with open("test_images_output/Challenge_output.txt", 'w') as file: #Writing all trackbar data to output
+        with open("test_images_output/2_output.txt", 'w') as file: #Writing all trackbar data to output
             file.write(src)
             file.write("\n")
             file.write(str(l))
@@ -71,10 +70,11 @@ while(1):
             file.write("\n")
             file.write(str(maxG))
             file.write("\n")
-            file.write(f"({x1//2}, {y1//2}), ")
-            file.write(f"({x2//2}, {y2//2}), ")
-            file.write(f"({x3//2}, {y3//2}), ")
-            file.write(f"({x4//2}, {y4//2})")
+            divider = 1
+            file.write(f"({x1//divider}, {y1//divider}), ")
+            file.write(f"({x2//divider}, {y2//divider}), ")
+            file.write(f"({x3//divider}, {y3//divider}), ")
+            file.write(f"({x4//divider}, {y4//divider})")
         break
     # Loading all the data from the trackbars
     l = cv2.getTrackbarPos('L', 'image')
