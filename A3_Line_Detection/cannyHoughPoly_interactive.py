@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 def callback(x):
     print(x)
 
-src = "test_images/2.png"
+src = "test_images/challenge.png"
 img = cv2.imread(src, 0) #read image as grayscale
 
 canny = cv2.Canny(img, 85, 255) # Run canny edge detection on image
@@ -53,7 +53,7 @@ while(1):
     cv2.imshow('output', lines_out)
     k = cv2.waitKey(1) & 0xFF
     if k == 27: #escape key
-        with open("test_images_output/2_output.txt", 'w') as file: #Writing all trackbar data to output
+        with open("test_images_output/challenge_3_output.txt", 'w') as file: #Writing all trackbar data to output
             file.write(src)
             file.write("\n")
             file.write(str(l))
@@ -70,7 +70,7 @@ while(1):
             file.write("\n")
             file.write(str(maxG))
             file.write("\n")
-            divider = 1
+            divider = 2
             file.write(f"({x1//divider}, {y1//divider}), ")
             file.write(f"({x2//divider}, {y2//divider}), ")
             file.write(f"({x3//divider}, {y3//divider}), ")

@@ -63,7 +63,7 @@ while True:
     masked_edges = cv2.bitwise_and(canny, mask)
     linesP = cv2.HoughLinesP(masked_edges, rho, theta, threshold, np.array([]), minLength, maxGap)
 
-    # Drawing hough lines onto original frame for output
+    # Drawing hough lines
     if linesP is not None:
         for i in range(0, len(linesP)):
             l = linesP[i][0]
