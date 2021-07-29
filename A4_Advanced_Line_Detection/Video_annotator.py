@@ -36,7 +36,7 @@ for a in range(240):
     # Gets rid of frame distortion
     img = cv2.undistort(frame, mtx, dist, None, newmtx)
 
-    # Convers the image to HSV and splits the channels
+    # Converts the image to HSV and splits the channels
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     h,s,v = cv2.split(hsv)
 
