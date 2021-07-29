@@ -92,9 +92,9 @@ for window in range(windows):
     win_left_ids = ((nonzeroy >= y_low) & (nonzeroy < y_high) &
                     (nonzerox >= xleft_low) & (nonzerox < xleft_high)).nonzero()[0]
     win_right_ids = ((nonzeroy >= y_low) & (nonzeroy < y_high) &
-                     (nonzerox >= xright_low) & (nonzeroy < xright_high)).nonzero()[0]
-    np.append(left_ids, win_left_ids)
-    np.append(right_ids, win_right_ids)
+                     (nonzerox >= xright_low) & (nonzerox < xright_high)).nonzero()[0]
+    left_ids = np.append(left_ids, win_left_ids)
+    right_ids = np.append(right_ids, win_right_ids)
 
     # Recenter windows if need be
     if len(win_left_ids) > minpix:
@@ -110,19 +110,23 @@ for window in range(windows):
         pass
 
     # Package up pixel positions into co-ords
-    left = [nonzerox[left_ids], nonzeroy[left_ids]]
-    right = [nonzerox[right_ids], nonzeroy[right_ids]]
+    left = [nonzerox[np.int32(left_ids)], nonzeroy[np.int32(left_ids)]]
+    right = [nonzerox[np.int32(right_ids)], nonzeroy[np.int32(right_ids)]]
 
-# Drawing colored pixels onto out_img
-out_img[left[0], left[1]] = [255,0,0]
-out_img[right[0], right[1]] = [0,0,255]
+# Drawing colored pixels onto out_img and sorting nonzeros into left and right - need to ignore ones not within boxes
+out_img[left[1], left[0]] = [255,0,0]
+out_img[right[1], right[0]] = [0,0,255]
+
+# Fitting a polynomial onto the pixels from out_img
+left_fit = np.polyfit(left[1], left[0], 2)
+right_fit = np.polyfit(right[1], right[0], 2)
+ploty = np.linspace(0, warped.shape[0]-1, warped.shape[0])
+left_fit = left_fit[0]*ploty**2 + left_fit[1]*ploty + left_fit[2]
+right_fit = right_fit[0]*ploty**2 + right_fit[1]*ploty + right_fit[2]
 
 # Plotting final images
-f, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(20, 10))
-ax1.set_title("Warped image")
-ax1.imshow(warped)
-ax2.set_title("Histogram")
-ax2.plot(histogram)
-ax3.set_title("Drawplane")
-ax3.imshow(out_img)
+# f, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10))
+plt.imshow(out_img)
+plt.plot(left_fit, ploty, color='purple')
+plt.plot(right_fit, ploty, color='purple')
 plt.show()
