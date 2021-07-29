@@ -30,5 +30,8 @@ for cal_image in images:
 
 cv2.destroyAllWindows()
 
+# Calculate camera matrix based upon calibration results
+ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, img.shape[::-1], None, None)
+
 # Store calibration results in a zip file for future use
-np.savez("cameraCalNums", objpoints, imgpoints)
+np.savez("cameraCalNums", ret, mtx, dist, rvecs, tvecs)
