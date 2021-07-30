@@ -10,7 +10,7 @@ dist = arr['arr_2']
 rvecs = arr['arr_3']
 tvecs = arr['arr_4']
 
-# Load in frames somewhere here !!
+# Load in frames here
 img = cv2.imread('test_images/straight_lines1.jpg')
 
 # Creating optimal camera matrix based upon img shape and undistorting
@@ -18,7 +18,7 @@ h, w = img.shape[:2]
 newmtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), 1, (w, h))
 img = cv2.undistort(img, mtx, dist, None, newmtx)
 cv2.imshow("Undistorted image", img)
-cv2.imwrite("output_images/Undistored_img.png", img)
+cv2.imwrite("output_images/Undistorted_img.png", img)
 cv2.waitKey(1000)
 
 hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
