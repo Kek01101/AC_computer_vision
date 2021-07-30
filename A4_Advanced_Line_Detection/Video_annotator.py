@@ -18,13 +18,13 @@ h, w = img.shape[:2]
 newmtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), 1, (w, h))
 
 # Importing the video
-cap = cv2.VideoCapture("project_video.mp4")
+cap = cv2.VideoCapture("challenge_video.mp4")
 if not cap.isOpened():
     raise BrokenPipeError("Video not initializing")
 
 # Defining codecs and videoWriter for creating output video
 fourcc = cv2.VideoWriter_fourcc(*"DIVX")
-output = cv2.VideoWriter("project_video_output.avi", fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
+output = cv2.VideoWriter("challenge_video_output.avi", fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
 
 # Defining variables to be used for 5-frame lane information averages
 curver_buffer = [0]*5
