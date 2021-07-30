@@ -33,5 +33,13 @@ cv2.destroyAllWindows()
 # Calculate camera matrix based upon calibration results
 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, img.shape[::-1], None, None)
 
+"""
+img = cv2.imread('camera_cal/calibration1.jpg')
+h, w = img.shape[:2]
+newmtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), 1, (w, h))
+img = cv2.undistort(img, mtx, dist, None, newmtx)
+cv2.imwrite("output_images/Undistortion_test.png", img)
+"""
+
 # Store calibration results in a zip file for future use
 np.savez("cameraCalNums", ret, mtx, dist, rvecs, tvecs)
