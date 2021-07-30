@@ -70,8 +70,8 @@ xleft_base = np.argmax(histogram[:midpoint])
 xright_base = np.argmax(histogram[midpoint:]) + midpoint
 
 # Sliding window parameters
-windows = 9
-margin = 100
+windows = 20
+margin = 50
 minpix = 50
 winheight = np.int32(warped.shape[0]//windows)
 
@@ -110,9 +110,9 @@ for window in range(windows):
     right_ids = np.append(right_ids, win_right_ids)
 
     # Recenter windows if need be
-    if len(win_left_ids) > minpix:
+    if len(win_left_ids) < minpix:
         leftx = np.int32(np.mean(nonzerox[win_left_ids]))
-    if len(win_right_ids) > minpix:
+    if len(win_right_ids) < minpix:
         rightx = np.int32(np.mean(nonzeroy[win_right_ids]))
 
     # Concatenate the list of indices
