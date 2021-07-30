@@ -26,15 +26,15 @@ if not cap.isOpened():
 fourcc = cv2.VideoWriter_fourcc(*"DIVX")
 output = cv2.VideoWriter("project_video_output.avi", fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
 
-# Defining variables to be used for 24-frame lane information averages
-curver_buffer = [0]*24
-curvel_buffer = [0]*24
+# Defining variables to be used for 5-frame lane information averages
+curver_buffer = [0]*5
+curvel_buffer = [0]*5
 c_buffer = 0
-offset_buffer = [0]*24
+offset_buffer = [0]*5
 o_buffer = 0
 
 # Begin pipeline
-for a in range(240):
+while True:
     ret, frame = cap.read()
 
     if not ret:
@@ -84,10 +84,8 @@ for a in range(240):
 
     # Sliding window parameters
     needNewWindow = True
-    # left_fit = np.array([-2.71823279e-05, 1.32617022e-02, 3.63059951e+02])
-    # right_fit = np.array([7.99650215e-07, 9.32131259e-03, 9.31589498e+02])
-    windows = 9
-    margin = 100
+    windows = 20
+    margin = 50
     minpix = 50
     winheight = np.int32(warped.shape[0]//windows)
 
@@ -131,9 +129,9 @@ for a in range(240):
             right_ids = np.append(right_ids, win_right_ids)
 
             # Recenter windows if need be
-            if len(win_left_ids) > minpix:
+            if len(win_left_ids) < minpix:
                 leftx = np.int32(np.mean(nonzerox[win_left_ids]))
-            if len(win_right_ids) > minpix:
+            if len(win_right_ids) < minpix:
                 rightx = np.int32(np.mean(nonzeroy[win_right_ids]))
 
             # Concatenate the list of indices
@@ -177,7 +175,7 @@ for a in range(240):
     curver_buffer[c_buffer] = ((1 + (2*real_right_fit[0]*np.max(ploty)*ym_per_pix + real_right_fit[1])**2)**1.5) / \
                   np.absolute(2*real_right_fit[0])
     c_buffer += 1
-    if c_buffer == 24:
+    if c_buffer == 5:
         c_buffer = 0
 
     # Calculating offset from center of the lane
@@ -185,7 +183,7 @@ for a in range(240):
     right_point = np.poly1d(real_right_fit)(np.max(ploty)*ym_per_pix)
     offset_buffer[o_buffer] = (left_point + right_point) / 2 - int(cap.get(3)) * xm_per_pix / 2
     o_buffer += 1
-    if o_buffer == 24:
+    if o_buffer == 5:
         o_buffer = 0
 
     # Creating dewarped image
@@ -216,8 +214,11 @@ for a in range(240):
     dewarped = cv2.add(dewarped_1, dewarped_2)
 
     # Writing curve and offset information onto image
-    curve_l = f"Radius of left curvature: {round(np.mean(curvel_buffer), 0)}"
-    curve_r = f"Radius of right curvature: {round(np.mean(curver_buffer), 0)}"
+    curve_l = f"Radius of left curvature: {int(np.mean(curvel_buffer))}m"
+    curve_r = f"Radius of right curvature: {int(np.mean(curver_buffer))}m"
+    # If the curves ever get this low, something has gone wrong
+    if int(np.mean(curvel_buffer)) < 1000 | int(np.mean(curver_buffer)) < 1000:
+        needNewWindow = True
     offset = round(np.mean(offset_buffer), 2)
     offset_out = f"Vehicle is {abs(offset)}m {'right' if offset < 0 else 'left'} of center"
     cv2.putText(dewarped, curve_l, (50, 60), cv2.FONT_HERSHEY_COMPLEX_SMALL, 2, (255,255,255), 2)
@@ -227,8 +228,7 @@ for a in range(240):
     # Writing finalized frame to output
     output.write(dewarped)
 
-    # Displaying completed image
-    cv2.imshow("frame", dewarped)
+    # This handles inputting the next frame at the correct time
     if cv2.waitKey(19) == ord('q'):
         break
 
