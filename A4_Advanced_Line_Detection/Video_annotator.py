@@ -26,6 +26,13 @@ if not cap.isOpened():
 fourcc = cv2.VideoWriter_fourcc(*"DIVX")
 output = cv2.VideoWriter("project_video_output.avi", fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
 
+# Defining variables to be used for 24-frame lane information averages
+curver_buffer = [0]*24
+curvel_buffer = [0]*24
+c_buffer = 0
+offset_buffer = [0]*24
+o_buffer = 0
+
 # Begin pipeline
 for a in range(240):
     ret, frame = cap.read()
@@ -160,6 +167,27 @@ for a in range(240):
     left_line = left_fit[0]*ploty**2 + left_fit[1]*ploty + left_fit[2]
     right_line = right_fit[0]*ploty**2 + right_fit[1]*ploty + right_fit[2]
 
+    # Calculating the radius of the curvature of the lane
+    ym_per_pix = 30/720
+    xm_per_pix = 3.7/700
+    real_left_fit = np.polyfit(left[1]*ym_per_pix, left[0]*xm_per_pix, 2)
+    real_right_fit = np.polyfit(right[1]*ym_per_pix, right[0]*xm_per_pix, 2)
+    curvel_buffer[c_buffer] =  ((1 + (2*real_left_fit[0]*np.max(ploty)*ym_per_pix + real_left_fit[1])**2)**1.5) / \
+                  np.absolute(2*real_left_fit[0])
+    curver_buffer[c_buffer] = ((1 + (2*real_right_fit[0]*np.max(ploty)*ym_per_pix + real_right_fit[1])**2)**1.5) / \
+                  np.absolute(2*real_right_fit[0])
+    c_buffer += 1
+    if c_buffer == 24:
+        c_buffer = 0
+
+    # Calculating offset from center of the lane
+    left_point = np.poly1d(real_left_fit)(np.max(ploty)*ym_per_pix)
+    right_point = np.poly1d(real_right_fit)(np.max(ploty)*ym_per_pix)
+    offset_buffer[o_buffer] = (left_point + right_point) / 2 - int(cap.get(3)) * xm_per_pix / 2
+    o_buffer += 1
+    if o_buffer == 24:
+        o_buffer = 0
+
     # Creating dewarped image
     # Converting polynomials into points for cv2 poly
     left_win_1 = np.array([np.transpose(np.vstack([left_line-10, ploty]))])
@@ -186,6 +214,15 @@ for a in range(240):
     dewarped_1 = cv2.bitwise_and(img,img,mask=cv2.bitwise_not(gray_lines))
     dewarped_2 = cv2.bitwise_and(dewarped,dewarped,mask=gray_lines)
     dewarped = cv2.add(dewarped_1, dewarped_2)
+
+    # Writing curve and offset information onto image
+    curve_l = f"Radius of left curvature: {round(np.mean(curvel_buffer), 0)}"
+    curve_r = f"Radius of right curvature: {round(np.mean(curver_buffer), 0)}"
+    offset = round(np.mean(offset_buffer), 2)
+    offset_out = f"Vehicle is {abs(offset)}m {'right' if offset < 0 else 'left'} of center"
+    cv2.putText(dewarped, curve_l, (50, 60), cv2.FONT_HERSHEY_COMPLEX_SMALL, 2, (255,255,255), 2)
+    cv2.putText(dewarped, curve_r, (50, 120), cv2.FONT_HERSHEY_COMPLEX_SMALL, 2, (255, 255, 255), 2)
+    cv2.putText(dewarped, offset_out, (50, 180), cv2.FONT_HERSHEY_COMPLEX_SMALL, 2, (255, 255, 255), 2)
 
     # Writing finalized frame to output
     output.write(dewarped)
