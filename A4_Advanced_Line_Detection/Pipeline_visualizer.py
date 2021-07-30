@@ -17,6 +17,9 @@ img = cv2.imread('test_images/straight_lines1.jpg')
 h, w = img.shape[:2]
 newmtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), 1, (w, h))
 img = cv2.undistort(img, mtx, dist, None, newmtx)
+cv2.imshow("Undistorted image", img)
+cv2.imwrite("output_images/Undistored_img.png", img)
+cv2.waitKey(1000)
 
 hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 h,s,v = cv2.split(hsv)
@@ -24,8 +27,12 @@ h,s,v = cv2.split(hsv)
 # Applying color thresholding - Indvidually done on both saturation and value
 s_binary = np.zeros_like(s)
 s_binary[(s >= 160) & (s <= 255)] = 1
+plt.imshow(s_binary, cmap="gray")
+plt.show()
 v_binary = np.zeros_like(v)
 v_binary[(v >= 206) & (v <= 255)] = 1
+plt.imshow(v_binary, cmap="gray")
+plt.show()
 
 # Applying sobel gradients - need to grayscale img first
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -34,10 +41,14 @@ sobel = np.absolute(sobel)
 sobel = np.uint8(255 * sobel / np.max(sobel))
 sobel_binary = np.zeros_like(sobel)
 sobel_binary[(sobel >= 30) & (sobel <= 140)] = 1
+plt.imshow(sobel_binary, cmap="gray")
+plt.show()
 
 # Combining the binary thresholds
 combined_binary = np.zeros_like(sobel_binary)
 combined_binary[(s_binary == 1) | (sobel_binary == 1) | (v_binary == 1)] = 1
+plt.imshow(combined_binary)
+plt.show()
 
 # Warping the image into a birds-eye view
 x = combined_binary.shape[1]
@@ -46,6 +57,8 @@ start_points = np.float32([[598, 452],[299, 654],[1020, 645],[715, 452]])
 end_points = np.float32([[335, 0],[350, y],[945, y],[955, 0]])
 matrix = cv2.getPerspectiveTransform(start_points, end_points)
 warped = cv2.warpPerspective(combined_binary, matrix, (x,y), flags=cv2.INTER_NEAREST)
+plt.imshow(warped)
+plt.show()
 
 # Creating a histogram of the warped image
 histogram = np.sum(warped[warped.shape[0]//2:,:], axis=0)
@@ -116,6 +129,8 @@ for window in range(windows):
 # Drawing colored pixels onto out_img and sorting nonzeros into left and right - need to ignore ones not within boxes
 out_img[left[1], left[0]] = [255,0,0]
 out_img[right[1], right[0]] = [0,0,255]
+plt.imshow(out_img)
+plt.show()
 
 # Fitting a polynomial onto the pixels from out_img
 left_fit = np.polyfit(left[1], left[0], 2)
