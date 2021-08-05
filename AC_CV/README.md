@@ -1,6 +1,6 @@
 # Assetto Corsa Computer Vision - Writeup
 
-<img src="https://github.com/kek01101/AC_computer_vision/blob/main/Picture1.png" height=80/>
+<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture1.png" height=80/>
 
 ## Abstract
 
@@ -17,7 +17,7 @@ However, due to time constraints and issues with Jetracer, the project instead m
 
 ### Project Objectives
   
-<img src="https://github.com/kek01101/AC_computer_vision/blob/main/Picture3.png" height=80/>
+<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture3.png" height=80/>
 
 ### Level of Autonomy
 
@@ -27,15 +27,15 @@ The AC CV vehicle was originally intended to be an autonomous vehicle functionin
 
 ### Actual system process
 
-<img src="https://github.com/kek01101/AC_computer_vision/blob/main/Picture4.png" height=80/>
+<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture4.png" height=80/>
 
-<img src="https://github.com/kek01101/AC_computer_vision/blob/main/Picture5.png" height=80/>
+<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture5.png" height=80/>
 
 Pedal and wheel inputs are split into two separate files in order to avoid confusing the neural network. Hence, there are two separate datasets upon which two separate models are trained.
 
 ### Neural Network Architecture
 
-<img src="https://github.com/kek01101/AC_computer_vision/blob/main/Picture6.png" height=80/>
+<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture6.png" height=80/>
 
 Note that the embedding and hidden layer are actual 8x larger in practice, the real sizes were too big for the visualizer. 
 
@@ -48,12 +48,13 @@ NN layout:
 
 ### Software Dependencies
 
-<img src="https://github.com/kek01101/AC_computer_vision/blob/main/Picture2.png" height=80/>
+<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture2.png" height=80/>
 
 Note: Anaconda is also required for downloading my python environment
 
 ### Game Mod Dependencies
 
+I used the Mistubish Lancer EVOIII as my car for this project, it is a modded car for Assetto.
 The mod used to add the Mitsubishi Lancer EVOIII to Assetto can be found [here](http://assetto-db.com/car/mitsubishi_lancer_evo3).
 
 ## Related Work
