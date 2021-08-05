@@ -1,0 +1,5 @@
+Model details-
+Model name: test_direction
+Dataset size: Full
+Epochs: 100
+Training type: One step
