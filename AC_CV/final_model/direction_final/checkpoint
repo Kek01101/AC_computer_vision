@@ -1,0 +1,2 @@
+model_checkpoint_path: "direction_a_model"
+all_model_checkpoint_paths: "direction_a_model"
