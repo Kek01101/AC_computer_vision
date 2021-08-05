@@ -69,19 +69,31 @@ Overall, all of these different ideas combined to inspire me to implement an aut
 
 To fully appreciate my results, it is best to first see a baseline, as dictated by my own driving. Note that all driving is in second gear, as the AI can not yet shift gears on its own.
 
-START VIDEO GOES HERE
+
+
+https://user-images.githubusercontent.com/67284308/128431570-9d18e724-8033-4c21-8499-d68d40ccd828.mp4
+
+
 
 ### 100 Epochs of Simple Training
 
 This is the resulting driving after 100 epochs of simple training, this took around 20 minutes. Simple training means that the AI does not learn from its mistakes.
 
-VIDEO GOES HERE
+
+
+https://user-images.githubusercontent.com/67284308/128431700-d120d353-1d26-48ae-bbe6-ad9663c1d6d3.mp4
+
+
 
 ### 1000 Epochs of Custom Training
 
 This is the resulting driving after 1000 epochs of custom training. The entire training took around 2 hours to complete, and 80 GB of checkpoint files were created. I decided not to push the checkpoint files to this repo. Custom training means that the AI does learn from its mistakes.
 
-VIDEO GOES HERE
+
+
+https://user-images.githubusercontent.com/67284308/128431832-7d99be58-bdbe-4d76-a25f-f4626c16ee46.mp4
+
+
 
 ## Discussion/Conclusion
 
