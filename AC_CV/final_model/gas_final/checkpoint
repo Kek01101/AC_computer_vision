@@ -1,0 +1,2 @@
+model_checkpoint_path: "gas_a_model"
+all_model_checkpoint_paths: "gas_a_model"
