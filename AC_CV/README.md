@@ -17,7 +17,7 @@ However, due to time constraints and issues with Jetracer, the project instead m
 
 ### Project Objectives
   
-<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture3.png" height=300/>
+<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture3.png" height=350/>
 
 ### Level of Autonomy
 
@@ -27,15 +27,15 @@ The AC CV vehicle was originally intended to be an autonomous vehicle functionin
 
 ### Actual system process
 
-<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture4.png" height=300/>
+<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture4.png" height=350/>
 
-<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture5.png" height=300/>
+<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture5.png" height=350/>
 
 Pedal and wheel inputs are split into two separate files in order to avoid confusing the neural network. Hence, there are two separate datasets upon which two separate models are trained.
 
 ### Neural Network Architecture
 
-<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture6.png" height=300/>
+<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture6.png" height=350/>
 
 Note that the embedding and hidden layer are actual 8x larger in practice, the real sizes were too big for the visualizer. 
 
@@ -48,7 +48,7 @@ NN layout:
 
 ### Software Dependencies
 
-<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture2.png" height=300/>
+<img src="https://github.com/kek01101/AC_computer_vision/blob/main/AC_CV/Picture2.png" height=350/>
 
 Note: Anaconda is also required for downloading my python environment
 
