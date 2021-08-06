@@ -1,0 +1,5 @@
+Model details-
+Model name: direction_final
+Dataset size: Full
+Epochs: 1000
+Training type: Custom
